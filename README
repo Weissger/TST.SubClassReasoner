@@ -1,0 +1,16 @@
+=========================
+ Sub Class Reasoner
+=========================
+
+Command line tool to manifest missing rdfs:subClassOf triples of a rdfs:subClassOf net.
+
+Can store triples into a NTriples file or manifest them directly into a triple store.
+
+Supported and tested triple stores:
+- bigdata / blazegraph (https://www.blazegraph.com/product/)
+- apache marmotta (http://marmotta.apache.org/)
+
+Authors
+=======
+
+* Thomas Weißgerber
