@@ -1,6 +1,6 @@
 import click
 
-from src import SubClassReasoner
+from src.SubClassReasoner import SubClassReasoner
 
 
 @click.command()

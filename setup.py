@@ -9,5 +9,5 @@ setup(
     license='',
     author='Thomas Weißgerber',
     author_email='weissger@fim.uni-passau.de',
-    description=''
+    description='', requires=['click']
 )
