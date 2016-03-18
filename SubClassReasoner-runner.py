@@ -21,7 +21,9 @@ def main(server, user, password, log_level, n_processes, prop_path, file, target
     reasoner = SubClassReasoner(server=server, user=user, password=password,
                                 prop_path=bool(prop_path), n_processes=int(n_processes), log_level=log_level)
 
-    if type(file) is list:
+    if file is None:
+        reasoner.reason(in_file=None, target=target, in_service=False)
+    elif type(file) is list:
         for f in file:
             reasoner.reason(f, target)
     else:
