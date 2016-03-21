@@ -41,7 +41,7 @@ class SubClassReasoner(object):
     def __reason_from_service(self, target):
         target_file = None
         offset = 0
-        step = 10000
+        step = 1
         while True:
             rdf_classes = self.__server.query(
                 """
@@ -50,6 +50,7 @@ class SubClassReasoner(object):
             LIMIT {}
             OFFSET {}
             """.format(step, offset))
+            log.debug("{} {} {}".format(step, offset, rdf_classes[0]["type"]["value"]))
             if len(rdf_classes) < 1:
                 break
             for t in rdf_classes:
