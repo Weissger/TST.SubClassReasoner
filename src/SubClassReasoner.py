@@ -41,7 +41,8 @@ class SubClassReasoner(object):
     def __reason_from_service(self, target):
         target_file = None
         offset = 0
-        step = 1
+        step = 100000
+        log.debug("CARE result set is not ordered to increase speed. This may be an incomplete query! ")
         while True:
             rdf_classes = self.__server.query(
                 """
@@ -50,9 +51,9 @@ class SubClassReasoner(object):
             LIMIT {}
             OFFSET {}
             """.format(step, offset))
-            log.debug("{} {} {}".format(step, offset, rdf_classes[0]["type"]["value"]))
             if len(rdf_classes) < 1:
                 break
+            log.debug("Step size: {} Offset: {} Starting_type: {}".format(step, offset, rdf_classes[0]["type"]["value"]))
             for t in rdf_classes:
                 offset += 1
                 log_progress(offset, 100)
