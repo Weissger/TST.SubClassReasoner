@@ -4,8 +4,8 @@ import os
 from datetime import datetime
 from multiprocessing import Process
 from .ProcessManager.ProcessManager import ProcessManager, OccupiedError
-from .NTripleLineParser.src.NTripleLineParser import NTripleLineParser
-from .SparqlInterface.src import ClientFactory
+from .NTripleLineParser.NTripleLineParser.NTripleLineParser import NTripleLineParser
+from .SparqlInterface.SparqlInterface import ClientFactory
 from .Materializer.Materializer import materialize_to_file, materialize_to_service
 from .Utilities.Logger import log
 from .Utilities.Utilities import log_progress
@@ -40,21 +40,29 @@ class SubClassReasoner(object):
 
     def __reason_from_service(self, target):
         target_file = None
-        rdf_classes = self.__server.query(
-            """
-        SELECT distinct ?type
-        WHERE {?type rdfs:subClassOf ?x}
-        """)
-        for i, t in enumerate(rdf_classes):
-            log_progress(i, 100)
-            t = t["type"]["value"]
-            if target:
-                if not target_file:
-                    target_file = target + str(self.__server.server).split("/")[-2] + str("_reasoned.nt")
-                self.__spawn_daemon(materialize_to_file, dict(rdf_type=t, target=target_file,
-                                                              server=self.__server))
-            else:
-                self.__spawn_daemon(materialize_to_service, dict(rdf_type=t, server=self.__server))
+        offset = 0
+        step = 10000
+        while True:
+            rdf_classes = self.__server.query(
+                """
+            SELECT distinct ?type
+            WHERE {{?type rdfs:subClassOf ?x}}
+            LIMIT {}
+            OFFSET {}
+            """.format(step, offset))
+            if len(rdf_classes) < 1:
+                break
+            for t in rdf_classes:
+                offset += 1
+                log_progress(offset, 100)
+                t = t["type"]["value"]
+                if target:
+                    if not target_file:
+                        target_file = target + str(self.__server.server).split("/")[-2] + str("_reasoned.nt")
+                    self.__spawn_daemon(materialize_to_file, dict(rdf_type=t, target=target_file,
+                                                                  server=self.__server))
+                else:
+                    self.__spawn_daemon(materialize_to_service, dict(rdf_type=t, server=self.__server))
 
     def __reason_from_file(self, f, target):
         target_file = None
