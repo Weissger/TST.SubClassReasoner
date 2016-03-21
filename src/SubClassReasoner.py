@@ -54,17 +54,18 @@ class SubClassReasoner(object):
             if len(rdf_classes) < 1:
                 break
             log.debug("Step size: {} Offset: {} Starting_type: {}".format(step, offset, rdf_classes[0]["type"]["value"]))
-            for t in rdf_classes:
-                offset += 1
-                log_progress(offset, 100)
-                t = t["type"]["value"]
-                if target:
-                    if not target_file:
-                        target_file = target + str(self.__server.server).split("/")[-2] + str("_reasoned.nt")
-                    self.__spawn_daemon(materialize_to_file, dict(rdf_type=t, target=target_file,
-                                                                  server=self.__server))
-                else:
-                    self.__spawn_daemon(materialize_to_service, dict(rdf_type=t, server=self.__server))
+            if False:
+                for t in rdf_classes:
+                    offset += 1
+                    log_progress(offset, 100)
+                    t = t["type"]["value"]
+                    if target:
+                        if not target_file:
+                            target_file = target + str(self.__server.server).split("/")[-2] + str("_reasoned.nt")
+                        self.__spawn_daemon(materialize_to_file, dict(rdf_type=t, target=target_file,
+                                                                      server=self.__server))
+                    else:
+                        self.__spawn_daemon(materialize_to_service, dict(rdf_type=t, server=self.__server))
 
     def __reason_from_file(self, f, target):
         target_file = None
