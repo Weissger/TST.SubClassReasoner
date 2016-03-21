@@ -54,6 +54,7 @@ class SubClassReasoner(object):
             if len(rdf_classes) < 1:
                 break
             log.debug("Step size: {} Offset: {} Starting_type: {}".format(step, offset, rdf_classes[0]["type"]["value"]))
+            offset += step
             if False:
                 for t in rdf_classes:
                     offset += 1
