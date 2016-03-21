@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from multiprocessing import Process
 from .ProcessManager.ProcessManager import ProcessManager, OccupiedError
-from .NTripleLineParser.NTripleLineParser.NTripleLineParser import NTripleLineParser
+from .NTripleLineParser.src.NTripleLineParser import NTripleLineParser
 from .SparqlInterface.SparqlInterface import ClientFactory
 from .Materializer.Materializer import materialize_to_file, materialize_to_service
 from .Utilities.Logger import log
