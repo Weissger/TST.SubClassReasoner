@@ -28,9 +28,9 @@ def main(server, user, password, log_level, n_processes, prop_path, file, target
         reasoner.reason(in_file=None, target=target)
     elif type(file) is list:
         for f in file:
-            reasoner.reason(f, target, offset)
+            reasoner.reason(f, target, offset=offset)
     else:
-        reasoner.reason(file, target, offset)
+        reasoner.reason(file, target, offset=offset)
 
 if __name__ == '__main__':
     main()
