@@ -50,7 +50,7 @@ class SubClassReasoner(object):
             OFFSET {}
             """.format(step, offset);
             log.debug("Running query: ".format(query))
-            rdf_classes = self.__server.query()
+            rdf_classes = self.__server.query(query)
             log.debug("Number of Query results: {}".format(len(rdf_classes)))
             if len(rdf_classes) < 1:
                 break
