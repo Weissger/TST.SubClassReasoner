@@ -21,8 +21,8 @@ class SubClassReasoner(object):
             self.processManager = ProcessManager(n_processes)
         self.__server = ClientFactory.make_client(server=server, user=user, password=password, prop_path=prop_path)
 
-    def reason(self, in_file=None, target="./reasoned/", in_service=False):
-        if in_service:
+    def reason(self, in_file=None, target="./reasoned/", offset=0):
+        if target == "":
             target = None
         else:
             # Make directory
@@ -32,15 +32,14 @@ class SubClassReasoner(object):
         cur_time = datetime.now()
         if in_file:
             log.info("Reasoning from file")
-            self.__reason_from_file(in_file, target)
+            self.__reason_from_file(in_file, target, offset=offset)
         else:
             log.info("Reasoning from service")
-            self.__reason_from_service(target)
+            self.__reason_from_service(target, offset=offset)
         log.info("Done in: " + str(datetime.now() - cur_time))
 
-    def __reason_from_service(self, target):
+    def __reason_from_service(self, target, offset=0):
         target_file = None
-        offset = 0
         step = 100000
         log.debug("CARE result set is not ordered to increase speed. This may be an incomplete query! ")
         while True:
@@ -67,7 +66,7 @@ class SubClassReasoner(object):
                 else:
                     self.__spawn_daemon(materialize_to_service, dict(rdf_type=t, server=self.__server))
 
-    def __reason_from_file(self, f, target):
+    def __reason_from_file(self, f, target, offset=0):
         target_file = None
         # Iterate through file
         with open(f) as input_file:
@@ -75,6 +74,9 @@ class SubClassReasoner(object):
             for line_num, line in enumerate(input_file):
                 t = self.nt_parser.get_subject(line)
                 if not t:
+                    offset += 1
+                    continue
+                if line_num < offset:
                     continue
                 log_progress(line_num, 100)
 

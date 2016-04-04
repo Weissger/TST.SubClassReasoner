@@ -16,7 +16,10 @@ from src.SubClassReasoner import SubClassReasoner
               help='Output folder to save reasoned data to.')
 @click.option('--prop-path/--no-prop-path', default=True)
 @click.option('--log-level', '-l', default="WARN")
-def main(server, user, password, log_level, n_processes, prop_path, file, target):
+@click.option('--offset', '-o', default="0")
+def main(server, user, password, log_level, n_processes, prop_path, file, target, offset):
+
+    offset = int(offset)
 
     reasoner = SubClassReasoner(server=server, user=user, password=password,
                                 prop_path=bool(prop_path), n_processes=int(n_processes), log_level=log_level)
@@ -25,9 +28,9 @@ def main(server, user, password, log_level, n_processes, prop_path, file, target
         reasoner.reason(in_file=None, target=target, in_service=False)
     elif type(file) is list:
         for f in file:
-            reasoner.reason(f, target)
+            reasoner.reason(f, target, offset)
     else:
-        reasoner.reason(file, target)
+        reasoner.reason(file, target, offset)
 
 if __name__ == '__main__':
     main()
