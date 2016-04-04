@@ -42,14 +42,15 @@ class SubClassReasoner(object):
         target_file = None
         step = 100000
         while True:
-            rdf_classes = self.__server.query(
-                """
+            query = """
             SELECT distinct ?type
             WHERE {{?type rdfs:subClassOf ?x}}
             ORDER BY ?type
             LIMIT {}
             OFFSET {}
-            """.format(step, offset))
+            """.format(step, offset);
+            log.debug("Running query: ".format(query))
+            rdf_classes = self.__server.query()
             log.debug("Number of Query results: {}".format(len(rdf_classes)))
             if len(rdf_classes) < 1:
                 break
