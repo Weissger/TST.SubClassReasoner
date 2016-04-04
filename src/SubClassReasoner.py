@@ -48,6 +48,7 @@ class SubClassReasoner(object):
                 """
             SELECT distinct ?type
             WHERE {{?type rdfs:subClassOf ?x}}
+            ORDER BY ?type
             LIMIT {}
             OFFSET {}
             """.format(step, offset))
